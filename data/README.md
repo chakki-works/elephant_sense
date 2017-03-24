@@ -11,5 +11,6 @@ The Document Quality is scored by 0/1 value.
 We (=3 annotators) scored the 0/1 quality score to 100 posts of [Qiita](http://qiita.com/).
 
 * The concordance rate is 70% (62% is all 0, 8% is all1).
-* The detail of the result is following
+* The result detail is following.
 
+![../docs/annotation_result.png](../docs/annotation_result.png)
