@@ -18,6 +18,7 @@ class SectionCountExtractor(FeatureExtractor):
                 count += 1
         return count
 
+
 class SentenceMeanLengthExtractor(FeatureExtractor):
 
     def extract(self, post, extracted=None):
@@ -26,8 +27,8 @@ class SentenceMeanLengthExtractor(FeatureExtractor):
         all_sentence_length = 0
 
         for ln in lines:
-            ln = re.sub(r"^ *","",ln)
-            if len(ln) != 0 and ln.startswith("#") == False:
+            ln = re.sub(r"^ *", "", ln)
+            if len(ln) != 0 and ln.startswith("#") is False:
                 sentence_count += 1
                 all_sentence_length += len(ln)
         return all_sentence_length / sentence_count
@@ -40,8 +41,8 @@ class SentenceMaxLengthExtractor(FeatureExtractor):
         max_sentence_length = 0
 
         for ln in lines:
-            ln = re.sub(r"^ *","",ln)
-            if len(ln) != 0 and ln.startswith("#") == False:
+            ln = re.sub(r"^ *", "", ln)
+            if len(ln) != 0 and ln.startswith("#") is False:
                 if max_sentence_length < len(ln):
                     max_sentence_length = len(ln)
         return max_sentence_length
@@ -54,21 +55,8 @@ class SentenceMinLengthExtractor(FeatureExtractor):
         min_sentence_length = 0
 
         for ln in lines:
-            ln = re.sub(r"^ *","",ln)
-            if len(ln) != 0 and ln.startswith("#") == False:
-                if min_sentence_length > len(ln) or min_sentence_length == 0:
-                    min_sentence_length = len(ln)
-        return min_sentence_length
-
-class SentenceMinLengthExtractor(FeatureExtractor):
-
-    def extract(self, post, extracted=None):
-        lines = post.body.split("\n")
-        min_sentence_length = 0
-
-        for ln in lines:
-            ln = re.sub(r"^ *","",ln)
-            if len(ln) != 0 and ln.startswith("#") == False:
+            ln = re.sub(r"^ *", "", ln)
+            if len(ln) != 0 and ln.startswith("#") is False:
                 if min_sentence_length > len(ln) or min_sentence_length == 0:
                     min_sentence_length = len(ln)
         return min_sentence_length
@@ -85,13 +73,14 @@ class KanjiRatioExtractor(FeatureExtractor):
         pattern = re.compile(regex)
 
         for ln in lines:
-            ln = re.sub(r"^ *","",ln)
-            if len(ln) != 0 and ln.startswith("#") == False:
+            ln = re.sub(r"^ *", "", ln)
+            if len(ln) != 0 and ln.startswith("#") is False:
                 for char in ln:
                     if re.search(pattern, char) is not None:
                         kanji_char_count += 1
                     all_char_count += 1
         return kanji_char_count / all_char_count
+
 
 class HiraganaRatioExtractor(FeatureExtractor):
 
@@ -104,13 +93,14 @@ class HiraganaRatioExtractor(FeatureExtractor):
         pattern = re.compile(regex)
 
         for ln in lines:
-            ln = re.sub(r"^ *","",ln)
-            if len(ln) != 0 and ln.startswith("#") == False:
+            ln = re.sub(r"^ *", "", ln)
+            if len(ln) != 0 and ln.startswith("#") is False:
                 for char in ln:
                     if re.search(pattern, char) is not None:
                         hiragana_char_count += 1
                     all_char_count += 1
         return hiragana_char_count / all_char_count
+
 
 class KatakanaRatioExtractor(FeatureExtractor):
 
@@ -123,13 +113,14 @@ class KatakanaRatioExtractor(FeatureExtractor):
         pattern = re.compile(regex)
 
         for ln in lines:
-            ln = re.sub(r"^ *","",ln)
-            if len(ln) != 0 and ln.startswith("#") == False:
+            ln = re.sub(r"^ *", "", ln)
+            if len(ln) != 0 and ln.startswith("#") is False:
                 for char in ln:
                     if re.search(pattern, char) is not None:
                         katakana_char_count += 1
                     all_char_count += 1
         return katakana_char_count / all_char_count
+
 
 class AlphabetRatioExtractor(FeatureExtractor):
 
@@ -142,8 +133,8 @@ class AlphabetRatioExtractor(FeatureExtractor):
         pattern = re.compile(regex)
 
         for ln in lines:
-            ln = re.sub(r"^ *","",ln)
-            if len(ln) != 0 and ln.startswith("#") == False:
+            ln = re.sub(r"^ *", "", ln)
+            if len(ln) != 0 and ln.startswith("#") is False:
                 for char in ln:
                     if re.search(pattern, char) is not None:
                         alphabet_char_count += 1
@@ -162,8 +153,8 @@ class NumberRatioExtractor(FeatureExtractor):
         pattern = re.compile(regex)
 
         for ln in lines:
-            ln = re.sub(r"^ *","",ln)
-            if len(ln) != 0 and ln.startswith("#") == False:
+            ln = re.sub(r"^ *", "", ln)
+            if len(ln) != 0 and ln.startswith("#") is False:
                 for char in ln:
                     if re.search(pattern, char) is not None:
                         number_char_count += 1
