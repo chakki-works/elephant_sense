@@ -6,7 +6,7 @@ import json
 import unittest
 from scripts.features.post import Post
 from scripts.features.post_feature import PostFeature
-from scripts.features.length_extractor import TitleLengthExtractor, SectionCountExtractor
+from scripts.features.length_extractor import TitleLengthExtractor, SectionCountExtractor, SentenceMeanLengthExtractor, SentenceMinLengthExtractor, SentenceMaxLengthExtractor, KanjiRatioExtractor, HiraganaRatioExtractor, KatakanaRatioExtractor, NumberRatioExtractor
 
 
 class TestPostFeature(unittest.TestCase):
@@ -18,11 +18,25 @@ class TestPostFeature(unittest.TestCase):
         d = post_f \
         .add(TitleLengthExtractor()) \
         .add(SectionCountExtractor()) \
+        .add(SentenceMeanLengthExtractor()) \
+        .add(SentenceMinLengthExtractor()) \
+        .add(SentenceMaxLengthExtractor()) \
+        .add(KanjiRatioExtractor()) \
+        .add(HiraganaRatioExtractor()) \
+        .add(KatakanaRatioExtractor()) \
+        .add(NumberRatioExtractor()) \
         .to_dict()
 
         print(d)
         self.assertTrue("title_length" in d)
         self.assertTrue("section_count" in d)
+        self.assertTrue("sentence_mean_length" in d)
+        self.assertTrue("sentence_min_length" in d)
+        self.assertTrue("sentence_max_length" in d)
+        self.assertTrue("kanji_ratio" in d)
+        self.assertTrue("hiragana_ratio" in d)
+        self.assertTrue("katakana_ratio" in d)
+        self.assertTrue("number_ratio" in d)
 
 
 TEST_JSON = r"""
