@@ -31,6 +31,7 @@ def process(text):
     text = cleaning(text)
     text = normalization(text)
     words = tokenizer.wakati_baseform(text)
+    words = [w.lower() for w in words]
     return words
 
 
