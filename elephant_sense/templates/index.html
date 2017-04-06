@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ static_url("index.css") }}" type="text/css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@2.2.6"></script>
+{% end %}
+
+{% block body %}
+<div class="container">
+    <div class="content has-text-centered">
+        <div id="main" >
+            <figure class="image is-128x128" style="margin:auto">
+                <img src="{{ static_url("encircled_elephant.PNG") }}" >
+            </figure>
+            <p class="title">
+                Elaphant Sense
+            </p>
+            <hr>
+            <div class="field has-addons region" style="max-width:800px; margin:auto">
+                <p class="control is-expanded">
+                    <input v-model="query" v-on:keyup.enter="search" class="input" type="text" placeholder="Please input the key words">
+                </p>
+                <p class="control" style="width:30px;">
+                    <button id="search" class="button" v-on:click="search">
+                        <span class="icon">
+                            <i class="fa fa-search"></i>
+                        </span>
+                    </button>
+                </p>
+                {% module xsrf_form_html() %}
+            </div>
+            <section id="posts" class="container">
+                <post v-for="r in results" :key="r.post_id" v-bind:post="r"></post>
+            </section>
+        </div>
+    </div>
+
+</div>
+
+{% end %}
+
+{% block bottom %}
+<template id="postTemplate">
+    <article class="media">
+        <figure class="media-left">
+            <p class="image is-64x64">
+            <img src="http://bulma.io/images/placeholders/128x128.png">
+            </p>
+        </figure>
+        <div class="media-content">
+            <div class="content">
+            <p>
+                <strong><a v-bind:href="post.url">[[post.title]]</a></strong> <small>@johnsmith</small> <small>31m</small>
+                <br>
+                [[post.headline]]
+            </p>
+            </div>
+        </div>
+    </article>
+</template>
+<script src="{{ static_url("index.js") }}"></script>
+<!-- Fork me on GitHub-->
+<a href="https://github.com/you"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+{% end %}
