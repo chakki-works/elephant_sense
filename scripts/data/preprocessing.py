@@ -15,7 +15,7 @@ def cleaning(text):
     replaced_text = clean_html_tags(html_text=replaced_text)  # remove html tag
     replaced_text = re.sub(r'\$.*?\$+', '', replaced_text)  # remove math equation
     replaced_text = re.sub(r'[@＠]\w+', '', replaced_text)  # remove @mention
-    replaced_text = re.sub(r'https?:\/\/.*?[\r\n ]', '', replaced_text)  # remove URL
+    replaced_text = re.sub(r'https?:\/\/.*?([\r\n ]|$)', '', replaced_text)  # remove URL
     replaced_text = re.sub(r'　', '', replaced_text)  # remove zenkaku space
     return replaced_text
 
