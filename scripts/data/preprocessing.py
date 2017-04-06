@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import json
 import os
+import sys
 import re
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
 
 from scripts.data.tokenizer import MeCabTokenizer
 from scripts.data.normalization import normalize_unicode, normalize_number
@@ -27,7 +29,13 @@ def normalization(text):
 
 
 def process(text):
-    tokenizer = MeCabTokenizer('/usr/local/lib/mecab/dic/mecab-ipadic-neologd/')
+    dicdir = os.popen("mecab-config --dicdir").readlines()[0][:-1]
+    if os.path.isdir(os.path.join(dicdir, "mecab-ipadic-neologd")):
+        dicdir += "/mecab-ipadic-neologd"
+    else:
+        dicdir += "/ipadic"
+        
+    tokenizer = MeCabTokenizer(dicdir)
     text = cleaning(text)
     text = normalization(text)
     words = tokenizer.wakati_baseform(text)
