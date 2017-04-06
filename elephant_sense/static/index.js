@@ -1,26 +1,35 @@
-$(function(){
-    $("#search").click(function(e) {
-        search();
-    });
-    $("#searchForm").on("keypress", function(e) {
-        if (e.keyCode == 13) {
-            search();
+Vue.prototype.$http = axios
+var app = new Vue({
+    el: "#main",
+    delimiters: ["[[", "]]"],
+    data: {
+        debug: true,
+        query: "",
+        results: []
+    },
+    methods:{
+        search: function(){
+            var message = {
+                "query": this.query
+            }
+            message["debug"] = this.debug;
+            var self = this;
+            self.$http({
+                method: "POST",
+                url:"/e/search",
+                data: message,
+                xsrfCookieName: "_xsrf",
+                xsrfHeaderName: "X-XSRFToken"
+            }).then(function(response) {
+                self.results = response.data.posts;
+            }).catch(function(error){
+                console.log(error);
+            });
         }
-    });
-})
-
-function getCookie(name) {
-    var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
-    return r ? r[1] : undefined;
-}
-
-function search() {
-    var message = {
-        "query": $("#query").val(),
-        "_xsrf": getCookie("_xsrf")
     }
-    message["debug"] = true;
-    $.post("/e/search", message, function(response) {
-        console.log(response);
-    });
-}
+})
+Vue.component("post", {
+    props: ["post"],
+    delimiters: ["[[", "]]"],
+    template: document.querySelector('#postTemplate').innerHTML
+})

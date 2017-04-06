@@ -30,14 +30,19 @@ class IndexHandler(tornado.web.RequestHandler):
 class SearchHandler(tornado.web.RequestHandler):
 
     def post(self):
-        is_debug = self.get_argument("debug", False)
-        query = self.get_argument("query", "")
+        data = tornado.escape.json_decode(self.request.body)
+        is_debug = data["debug"]
+        query = data["query"]
         message = {"posts": []}
         if is_debug:
             from elephant_sense.example_data import posts
             message["posts"] = posts
-            self.write(json.dumps(message))
+            self.write(message)
         elif not query:
-            self.write(json.dumps(message))
-                
-        self.write(json.dumps(message))
+            self.write(message)
+        else:
+            self.write(message)
+    
+    def write_json(self, message):
+        serialized = json.dumps(message, ensure_ascii=False)
+        self.write(serialized)
