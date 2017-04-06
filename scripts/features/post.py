@@ -8,6 +8,7 @@ class Post():
         self.url = post_json["url"]
         self.title = post_json["title"]
         self.body = post_json["body"]
+        self.rendered_body = post_json["rendered_body"]
     
     def quality(self, zero_one=True):
         score = 0
