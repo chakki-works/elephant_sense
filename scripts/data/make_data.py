@@ -12,15 +12,20 @@ def list_labels():
         next(reader, None)  # Skip header
         for row in reader:
             url = row[1]
-            labels = row[3:]
+            labels = row[3:]  # 4 column~ is annotator columns.
             item_id = url.split('/')[-1]
             yield item_id, labels
 
 
 def add_annotations():
     for item_id, labels in list_labels():
+        target_dir = 'processed/items'
         item_file = os.path.join(BASE_DIR, 'raw/items/{}.json'.format(item_id))
-        save_file = os.path.join(BASE_DIR, 'processed/items/{}.json'.format(item_id))
+        save_file = os.path.join(BASE_DIR, target_dir + '/{}.json'.format(item_id))
+
+        if not os.path.isdir(os.path.join(BASE_DIR, target_dir)):
+            os.mkdir(os.path.join(BASE_DIR, target_dir))
+
         with open(item_file, 'r') as rf, open(save_file, 'w') as wf:
             item = json.load(rf)
             item['annotations'] = [
