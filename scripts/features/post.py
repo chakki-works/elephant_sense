@@ -2,7 +2,7 @@ class Post():
 
     def __init__(self, post_json):
         self.post_id = post_json["id"]
-        self.annotations = -1
+        self.annotations = {}
         if "annotations" in post_json:
             self.annotations = post_json["annotations"]
         self.user_id = post_json["user"]["id"]
@@ -14,7 +14,7 @@ class Post():
     
     def quality(self, zero_one=True):
         score = 0
-        if self.annotations < 0:
+        if len(self.annotations) == 0:
             return -1
 
         for a in self.annotations:
