@@ -19,8 +19,10 @@ class PostFeature():
 
     def to_dict(self, drop_disused_feature=True):
         post_d = vars(self.post)
-        post_d["quality"] = self.post.quality()
-        del post_d["annotations"]
+
+        if "annotations" in post_d:
+            post_d["quality"] = self.post.quality()
+            del post_d["annotations"]
 
         if drop_disused_feature:
             del post_d["post_id"]

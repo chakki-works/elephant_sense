@@ -8,7 +8,7 @@ class Reader():
     def __init__(self, data_folder=""):
         self.data_folder = data_folder
         if not data_folder:
-            self.data_folder = os.path.join(os.path.dirname(__file__), "../../data/processed")
+            self.data_folder = os.path.join(os.path.dirname(__file__), "../../data/processed/items")
     
     def post_iterator(self):
         targets = []
