@@ -4,12 +4,6 @@ content itself quality evaluation by machine learning
 
 # Setup
 
-Get Qiita API token and set it to environment variable.
-
-```
-$ export QiitaToken=xxx
-```
-
 ## Data Preparation
 
 * Locate the Qiita posts on `data/raw/items`
