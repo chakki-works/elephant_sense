@@ -50,7 +50,7 @@ class SearchHandler(tornado.web.RequestHandler):
             message["posts"] = [self.trim(p) for p in posts]
             self.write(message)
         else:
-            posts = search_posts(query, n=200)
+            posts = search_posts(query, n=50)  # limit for performance. need improvements for feature extraction.
             process = 4
             batch_size = len(posts) / process
             tasks = [(int(i * batch_size), int(i * batch_size + batch_size)) for i in range(process)]
