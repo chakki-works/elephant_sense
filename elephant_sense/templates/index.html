@@ -31,7 +31,7 @@
                 {% module xsrf_form_html() %}
             </div>
             <section id="posts" class="container">
-                <post v-for="r in results" :key="r.post_id" v-bind:post="r"></post>
+                <post v-for="r in results" :key="r.id" v-bind:post="r"></post>
             </section>
         </div>
     </div>
@@ -44,16 +44,16 @@
 <template id="postTemplate">
     <article class="media">
         <figure class="media-left">
-            <p class="image is-64x64">
-            <img src="http://bulma.io/images/placeholders/128x128.png">
+            <p >
+                <meter v-bind:value="post.score" low="0.7" optimum="1.0">[[post.score]]</meter>
             </p>
         </figure>
         <div class="media-content">
             <div class="content">
             <p>
-                <strong><a v-bind:href="post.url">[[post.title]]</a></strong> <small>@johnsmith</small> <small>31m</small>
+                <strong><a v-bind:href="post.url">[[post.title]]</a></strong> <small>@[[post.user.name]]</small> <small>[[post.update_time]]</small>
                 <br>
-                [[post.headline]]
+                [[post.header]]
             </p>
             </div>
         </div>

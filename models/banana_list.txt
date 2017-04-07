@@ -1,0 +1,1 @@
+header1_mean_length header2_mean_length hiragana_ratio kanji_ratio katakana_ratio number_ratio section_count sentence_max_length sentence_mean_length sentence_min_length title_length user_followers_count

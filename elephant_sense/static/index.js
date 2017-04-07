@@ -3,7 +3,7 @@ var app = new Vue({
     el: "#main",
     delimiters: ["[[", "]]"],
     data: {
-        debug: true,
+        debug: false,
         query: "",
         results: []
     },
