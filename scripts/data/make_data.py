@@ -2,6 +2,8 @@ import csv
 import json
 import os
 
+import requests
+from bs4 import BeautifulSoup
 BASE_DIR = os.path.join(os.path.dirname(__file__), '../../data/')
 
 
@@ -15,6 +17,13 @@ def list_labels():
             labels = row[3:]  # 4 column~ is annotator columns.
             item_id = url.split('/')[-1]
             yield item_id, labels
+
+
+def get_likecount(url):
+    html = requests.get(url).text
+    soup = BeautifulSoup(html, 'html.parser')
+    likecount = soup.find(class_="js-likecount").text
+    return likecount
 
 
 def add_annotations():
@@ -35,6 +44,7 @@ def add_annotations():
                 }
                 for annotator_id, quality in enumerate(labels)
                 ]
+            item['likes'] = get_likecount(item['url'])
             wf.write(json.dumps(item, indent=4, ensure_ascii=False))
 
 
