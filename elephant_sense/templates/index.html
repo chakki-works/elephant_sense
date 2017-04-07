@@ -14,15 +14,17 @@
                 <img src="{{ static_url("encircled_elephant.PNG") }}" >
             </figure>
             <p class="title">
-                Elaphant Sense
+                Elephant Sense
             </p>
             <hr>
             <div class="field has-addons region" style="max-width:800px; margin:auto">
                 <p class="control is-expanded">
-                    <input v-model="query" v-on:keyup.enter="search" class="input" type="text" placeholder="Please input the key words">
+                    <input 
+                    class="input" type="text" placeholder="Please input the key words"
+                    v-model="query" v-on:keyup.enter="search" v-bind:disabled="working">
                 </p>
                 <p class="control" style="width:30px;">
-                    <button id="search" class="button" v-on:click="search">
+                    <button id="search" class="button" v-on:click="search" v-bind:disabled="working">
                         <span class="icon">
                             <i class="fa fa-search"></i>
                         </span>

@@ -5,6 +5,7 @@ var app = new Vue({
     data: {
         debug: false,
         query: "",
+        working: false,
         results: []
     },
     methods:{
@@ -14,6 +15,7 @@ var app = new Vue({
             }
             message["debug"] = this.debug;
             var self = this;
+            self.working = true;
             self.$http({
                 method: "POST",
                 url:"/e/search",
@@ -21,6 +23,7 @@ var app = new Vue({
                 xsrfCookieName: "_xsrf",
                 xsrfHeaderName: "X-XSRFToken"
             }).then(function(response) {
+                self.working = false;
                 self.results = response.data.posts;
             }).catch(function(error){
                 console.log(error);

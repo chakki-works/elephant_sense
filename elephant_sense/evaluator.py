@@ -4,7 +4,9 @@ import numpy as np
 from sklearn.externals import joblib
 from scripts.features.post import Post
 from scripts.features.post_feature import PostFeature
-import scripts.features.length_extractor as fext
+import scripts.features.length_extractor as lext
+import scripts.features.charactor_extractor as cext
+import scripts.features.structure_extractor as sext
 
 
 class Evaluator():
@@ -32,21 +34,21 @@ class Evaluator():
     def get_features(self, post_dict):
         post = Post(post_dict)
         pf = PostFeature(post)
-        si = fext.SentenceInfo(post.body)
-        si.analyse()
+        cleaned_rendered_body = cext.RenderedBodyPreprocessor().clean_rendered_body(post.rendered_body)
         
-        pf.add(fext.TitleLengthExtractor())
-        pf.add(fext.SectionCountExtractor())
-        pf.add(fext.SentenceMeanLengthExtractor(si))
-        pf.add(fext.SentenceMinLengthExtractor(si))
-        pf.add(fext.SentenceMaxLengthExtractor(si))    
-        pf.add(fext.KanjiRatioExtractor(si))
-        pf.add(fext.HiraganaRatioExtractor(si))
-        pf.add(fext.KatakanaRatioExtractor(si))
-        pf.add(fext.NumberRatioExtractor(si))
-        pf.add(fext.Header1MeanLengthExtractor())
-        pf.add(fext.Header2MeanLengthExtractor())
-
+        pf.add(lext.TitleLengthExtractor())
+        pf.add(lext.SectionCountExtractor())
+        pf.add(cext.KanjiRatioExtractor(cleaned_rendered_body))
+        pf.add(cext.HiraganaRatioExtractor(cleaned_rendered_body))
+        pf.add(cext.KatakanaRatioExtractor(cleaned_rendered_body))
+        pf.add(cext.NumberRatioExtractor(cleaned_rendered_body))
+        pf.add(cext.PunctuationRatioExtractor(cleaned_rendered_body))
+        pf.add(lext.SentenceMeanLengthExtractor(cleaned_rendered_body))
+        pf.add(lext.SentenceMeanLengthExtractor(cleaned_rendered_body))
+        pf.add(lext.SentenceMaxLengthExtractor(cleaned_rendered_body))
+        pf.add(sext.ImageCountExtractor())
+        pf.add(sext.ImageRatioExtractor(cleaned_rendered_body))
+            
         pf_d = pf.to_dict(drop_disused_feature=True)
         f_vector = []
         for f in self.features:

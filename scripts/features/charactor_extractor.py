@@ -53,7 +53,7 @@ class CharacterRatio():
     def character_ratio(self):
         pattern = re.compile(self.regex)
         count = len(re.findall(pattern, self.text))
-        ratio = count / len(self.text)
+        ratio = 0 if len(self.text) == 0 else count / len(self.text)
         return ratio
 
 

@@ -4,6 +4,7 @@ from datetime import datetime
 import tornado.escape
 import tornado.web
 from bs4 import BeautifulSoup
+from sklearn.externals.joblib import Parallel, delayed
 from elephant_sense.evaluator import Evaluator
 from elephant_sense.qiita_api import search_posts
 
@@ -49,9 +50,16 @@ class SearchHandler(tornado.web.RequestHandler):
             message["posts"] = [self.trim(p) for p in posts]
             self.write(message)
         else:
-            posts = search_posts(query, n=50)
-            posts = self.scoring(posts)
-            message["posts"] = [self.trim(p) for p in posts]
+            posts = search_posts(query, n=200)
+            process = 4
+            batch_size = len(posts) / process
+            tasks = [(int(i * batch_size), int(i * batch_size + batch_size)) for i in range(process)]
+            dones = Parallel(n_jobs=process)(delayed(parallel_scoring)(self.evaluator, posts[t[0]:t[1]]) for t in tasks)
+            posts = []
+            for scoreds in dones:
+                posts += [self.trim(s) for s in scoreds]
+            posts = sorted(posts, key=lambda p: p["score"], reverse=True)
+            message["posts"] = posts
             self.write(message)
     
     @classmethod
@@ -78,3 +86,12 @@ class SearchHandler(tornado.web.RequestHandler):
     def write_json(self, message):
         serialized = json.dumps(message, ensure_ascii=False)
         self.write(serialized)
+
+
+def parallel_scoring(evaluator, posts):
+    scored = []
+    for p in posts:
+        score = evaluator.evaluate(p)
+        p["score"] = score
+        scored.append(p)  # sort after merge
+    return scored
