@@ -2,16 +2,22 @@ import os
 from sklearn.externals import joblib
 
 
-class SaveModels():
+class SaveModelsScalor():
 
-    def __init__(self, clf, data_folder=""):
-        file_name = "banana.pkl"
+    def __init__(self, clf, scaler, data_folder=""):
+        model_file_name = "banana.pkl"
+        scaler_file_name = "banana_scaler.pkl"
+
         def_file_path = "../../models/"
         self.data_folder = data_folder
 
         if not data_folder:
-            self.data_file = os.path.join(os.path.dirname(__file__), def_file_path) + file_name
+            model_file = os.path.join(os.path.dirname(__file__), def_file_path) + model_file_name
+            scaler_file = os.path.join(os.path.dirname(__file__), def_file_path) + scaler_file_name
         else:
-            self.data_file = self.data_folder + file_name
+            model_file = self.data_folder + model_file_name
+            scaler_file = self.data_folder + model_file_name
 
-        joblib.dump(clf, self.data_file)
+        joblib.dump(clf, model_file)
+        joblib.dump(scaler, scaler_file)
+
