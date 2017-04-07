@@ -1,7 +1,41 @@
 import re
 from bs4 import BeautifulSoup
 from scripts.features.feature_extractor import FeatureExtractor
-from scripts.data.preprocessing import cleaning
+from scripts.data.cleaning import clean_code
+
+
+def clean_html_tags(html_text):
+    soup = BeautifulSoup(html_text, 'html.parser')
+
+    if soup.find("h") is not None:
+        soup.find("h").extract()
+
+    cleaned_text = soup.get_text()
+    cleaned_text = ''.join(cleaned_text.splitlines())
+    return cleaned_text
+
+
+def clean_code(html_text):
+    """Qiitaのコードを取り除きます
+    :param html_text:
+    :return:
+    """
+    soup = BeautifulSoup(html_text, 'html.parser')
+    [x.extract() for x in soup.findAll(class_="code-frame")]
+    [x.extract() for x in soup.findAll("code")]
+    cleaned_text = soup.get_text()
+    cleaned_text = ''.join(cleaned_text.splitlines())
+    return cleaned_text
+
+
+def cleaning(text):
+    replaced_text = clean_code(html_text=text)  # remove source code
+    replaced_text = clean_html_tags(html_text=replaced_text)  # remove html tag
+    replaced_text = re.sub(r'\$.*?\$+', '', replaced_text)  # remove math equation
+    replaced_text = re.sub(r'[@＠]\w+', '', replaced_text)  # remove @mention
+    replaced_text = re.sub(r'https?:\/\/.*?([\r\n ]|$)', '', replaced_text)  # remove URL
+    replaced_text = re.sub(r'　', '', replaced_text)  # remove zenkaku space
+    return replaced_text
 
 
 class RenderedBodyPreprocessor():
@@ -75,7 +109,7 @@ class NumberRatioExtractor(FeatureExtractor):
 
 class PunctuationRatioExtractor(FeatureExtractor):
     def __init__(self, cleaned_rendered_body):
-        self.regex_text = '[、。]'
+        self.regex_text = '[、]'
         self.character_ratio = CharacterRatio(self.regex_text, cleaned_rendered_body)
 
     def extract(self, post, extracted=None):

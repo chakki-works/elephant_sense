@@ -21,9 +21,8 @@ class SectionCountExtractor(FeatureExtractor):
 
 
 class SentenceMeanLengthExtractor(FeatureExtractor):
-
     def __init__(self, text):
-        self.text = "".join(text.split("\n"))
+        self.text = text
 
     def extract(self, post, extracted=None):
         lines = self.text.split("。")
@@ -37,27 +36,43 @@ class SentenceMeanLengthExtractor(FeatureExtractor):
 
 
 class SentenceMaxLengthExtractor(FeatureExtractor):
-
-    def __init__(self, SentenceInfo):
-        self.SentenceInfo = SentenceInfo
+    def __init__(self, text):
+        self.text = text
 
     def extract(self, post, extracted=None):
-        return self.SentenceInfo.max_sentence_length
+        lines = self.text.split("。")
+        count = 0
+        max_length = 0
+
+        for ln in lines:
+            count += 1
+            if len(ln) > max_length:
+                max_length = len(ln)
+
+        return max_length / count
 
 
 class SentenceMinLengthExtractor(FeatureExtractor):
-
-    def __init__(self, SentenceInfo):
-        self.SentenceInfo = SentenceInfo
+    def __init__(self, text):
+        self.text = text
 
     def extract(self, post, extracted=None):
-        return self.SentenceInfo.min_sentence_length
+        lines = self.text.split("。")
+        count = 0
+        min_length = 0
+
+        for ln in lines:
+            count += 1
+            if len(ln) < min_length or min_length == 0:
+                min_length = len(ln)
+
+        return min_length / count
 
 
 class Header1MeanLengthExtractor(FeatureExtractor):
 
     def extract(self, post, extracted=None):
-        soup = BeautifulSoup(post.rendered_body, "html5lib")
+        soup = BeautifulSoup(post.rendered_body, "html.parser")
         header1s = soup.find_all('h1')
         sentence_count = 0
         count_sentence_length = 0
@@ -76,7 +91,7 @@ class Header1MeanLengthExtractor(FeatureExtractor):
 class Header2MeanLengthExtractor(FeatureExtractor):
 
     def extract(self, post, extracted=None):
-        soup = BeautifulSoup(post.rendered_body, "html5lib")
+        soup = BeautifulSoup(post.rendered_body, "html.parser")
         header1s = soup.find_all('h2')
         sentence_count = 0
         count_sentence_length = 0
