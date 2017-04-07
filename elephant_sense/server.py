@@ -3,8 +3,9 @@ import json
 from datetime import datetime
 import tornado.escape
 import tornado.web
-from elephant_sense.evaluator import Evaluator
 from bs4 import BeautifulSoup
+from elephant_sense.evaluator import Evaluator
+from elephant_sense.qiita_api import search_posts
 
 
 class Application(tornado.web.Application):
@@ -47,9 +48,10 @@ class SearchHandler(tornado.web.RequestHandler):
             posts = self.scoring(posts)
             message["posts"] = [self.trim(p) for p in posts]
             self.write(message)
-        elif not query:
-            self.write(message)
         else:
+            posts = search_posts(query, n=50)
+            posts = self.scoring(posts)
+            message["posts"] = [self.trim(p) for p in posts]
             self.write(message)
     
     @classmethod

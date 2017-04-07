@@ -4,11 +4,13 @@ content itself quality evaluation by machine learning
 
 # Setup
 
-Get Qiita API token and set it to environment variable.
+Get [Qiita API token](https://qiita.com/api/v2/docs#認証認可) and set it to environment variable.
 
 ```
 $ export QiitaToken=xxx
 ```
+
+(only `read_qiita` scope is required)
 
 ## Data Preparation
 
