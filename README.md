@@ -16,6 +16,10 @@ $ export QiitaToken=xxx
 
 (only `read_qiita` scope is required)
 
+Then use Dockerfile and run!
+
+# For Training the Model
+
 ## Data Preparation
 
 * Locate the Qiita posts on `data/raw/items`
