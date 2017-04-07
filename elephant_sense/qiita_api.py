@@ -1,34 +1,32 @@
 # -*- coding: utf-8 -*-
-def search_posts(keywords_str='', n=100):
-    posts = [{'body': '# Example',
-              'coediting': False,
-              'created_at': '2000-01-01T00:00:00+00:00',
-              'group': {'created_at': '2000-01-01T00:00:00+00:00',
-                        'id': 1,
-                        'name': 'Dev',
-                        'private': False,
-                        'updated_at': '2000-01-01T00:00:00+00:00',
-                        'url_name': 'dev'},
-              'id': '4bd431809afb1bb99e4f',
-              'private': False,
-              'rendered_body': '<h1>Example</h1>',
-              'tags': [{'name': 'Ruby', 'versions': ['0.0.1']}],
-              'title': 'Example title',
-              'updated_at': '2000-01-01T00:00:00+00:00',
-              'url': 'https://qiita.com/yaotti/items/4bd431809afb1bb99e4f',
-              'user': {'description': 'Hello, world.',
-                       'facebook_id': 'yaotti',
-                       'followees_count': 100,
-                       'followers_count': 200,
-                       'github_login_name': 'yaotti',
-                       'id': 'yaotti',
-                       'items_count': 300,
-                       'linkedin_id': 'yaotti',
-                       'location': 'Tokyo, Japan',
-                       'name': 'Hiroshige Umino',
-                       'organization': 'Increments Inc',
-                       'permanent_id': 1,
-                       'profile_image_url': 'https://si0.twimg.com/profile_images/2309761038/1ijg13pfs0dg84sk2y0h_normal.jpeg',
-                       'twitter_screen_name': 'yaotti',
-                       'website_url': 'http://yaotti.hatenablog.com'}}]
-    return posts
+import os
+import math
+from qiita_v2.client_base import QiitaClientBase
+
+
+class QiitaClient(QiitaClientBase):
+    def search_items(self, params=None, headers=None):
+        """指定したクエリの投稿を返します。
+        """
+        return self.get("/items/", params, headers)
+
+
+def search_posts(keywords='', n=100):
+    access_token = os.environ('QiitaToken')
+    client = QiitaClient(access_token=access_token)
+    if n >= 100:
+        pages = math.ceil(n / 100)
+        per_page = 100
+    else:
+        pages = 1
+        per_page = n
+    res = []
+    for page in range(1, pages + 1):
+        items = client.search_items(params={'query': keywords, 'per_page': per_page, 'page': page})
+        items = items.to_json()
+        res.extend(items)
+    return res[:n]
+
+if __name__ == '__main__':
+    items = search_posts(keywords="Python 機械学習", n=320)
+    print(len(items))
